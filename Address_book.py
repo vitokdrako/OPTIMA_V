@@ -1,7 +1,7 @@
 import re
 import pickle
 from pathlib import Path
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from functools import reduce
 from collections import UserDict
 
@@ -82,7 +82,19 @@ class Birthday(Field):
     @property
     def date(self):
         return date(self.__year, self.__month, self.__day)
-        
+
+    @property
+    def day(self):
+        return self.__day
+
+    @property
+    def month(self):
+        return self.__month
+
+    @property
+    def year(self):
+        return self.__year
+
     @value.setter
     def value(self, value: str):
         self.__year, self.__month, self.__day = self.__validate(value)
@@ -97,7 +109,6 @@ class Birthday(Field):
                 if date(int(year), int(month), int(day)):
                     return int(year), int(month), int(day)
         raise ValueError(f"Birthday '{value}' format is incorrect. Use DD-MM-YYYY format")
-
 
 class Record:
     def __init__(self, name: str, phone=None, birthday=None, address=None, email=None):
@@ -199,3 +210,20 @@ class AddressBook(UserDict):
     def search_contacts(self, term):
         result = list(filter(lambda contact: term in contact.name.value.lower() or contact.has_phone(term), self.data.values()))
         return result
+
+    def contacts_upcoming_birthdays(self, n=7):
+        today = datetime.now()
+        upcoming_birthdays = []
+
+        for contact in self.data.values():
+            if contact.birthday:
+                next_birthday = datetime(today.year, contact.birthday.month, contact.birthday.day)
+                if next_birthday < today:
+                    next_birthday = datetime(today.year + 1, contact.birthday.month, contact.birthday.day)
+
+                days_until_birthday = (next_birthday - today).days
+                if 0 <= days_until_birthday <= n:
+                    upcoming_birthdays.append(contact)
+
+        return upcoming_birthdays
+
