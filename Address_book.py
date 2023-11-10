@@ -1,6 +1,6 @@
 import pickle
 from pathlib import Path
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from functools import reduce
 from collections import UserDict
 
@@ -166,3 +166,20 @@ class AddressBook(UserDict):
     def search_contacts(self, term):
         result = list(filter(lambda contact: term in contact.name.value.lower() or contact.has_phone(term), self.data.values()))
         return result
+
+    def contacts_upcoming_birthdays(self, n=7):
+        today = datetime.now()
+        upcoming_birthdays = []
+
+        for contact in self.data.values():
+            if contact.birthday:
+                next_birthday = datetime(today.year, contact.birthday.month, contact.birthday.day)
+                if next_birthday < today:
+                    next_birthday = datetime(today.year + 1, contact.birthday.month, contact.birthday.day)
+
+                days_until_birthday = (next_birthday - today).days
+                if 0 <= days_until_birthday <= n:
+                    upcoming_birthdays.append(contact)
+
+        return upcoming_birthdays
+
