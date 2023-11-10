@@ -1,5 +1,5 @@
 from Address_book import AddressBook, Record, DuplicatedPhoneError
-
+import shlex
 
 records = None
 
@@ -26,7 +26,7 @@ def input_error(*expected_args):
 def capitalize_user_name(func):
     def inner(*args):
         new_args = list(args)
-        new_args[0] = new_args[0].capitalize()
+        new_args[0] = new_args[0].title()
         return func(*new_args)
     return inner
 
@@ -87,6 +87,32 @@ def birthday_handler(*args):
             return f"{record.days_to_birthday()} days to the next {user_name}'s birthday ({record.birthday})."
 
 @capitalize_user_name    
+@input_error("name")        
+def address_handler(*args):
+    user_name = args[0]
+    user_address = args[1] if len(args) > 1 else None
+    record = records.find(user_name)
+    if record:
+        if user_address:
+            record.add_address(user_address)
+            return f"Address '{user_address}' for contact {user_name} added."
+        else:
+            return f"Address for contact {user_name}: {record.address}."
+
+@capitalize_user_name    
+@input_error("name")        
+def email_handler(*args):
+    user_name = args[0]
+    user_email = args[1] if len(args) > 1 else None
+    record = records.find(user_name)
+    if record:
+        if user_email:
+            record.add_email(user_email)
+            return f"Email '{user_email}' for contact {user_name} added."
+        else:
+            return f"Email for contact {user_name}: {record.email}."
+
+@capitalize_user_name    
 @input_error("name")
 def delete_handler(*args):
     user_name = args[0]
@@ -133,11 +159,13 @@ def show_all_handler(*args):
 COMMANDS = {
             help_handler(): "help",
             greeting_handler: "hello",
+            address_handler: "address",
             add_handler: "add",
             change_handler: "change",
             phone_handler: "phone",
             search_handler: "search",
             birthday_handler: "birthday",
+            email_handler: "email",
             show_all_handler: "show all",
             delete_handler: "delete"
             }
@@ -146,7 +174,7 @@ EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.startswith(kw):
-            return func, text[len(kw):].strip().split()
+            return func, shlex.split(text[len(kw):]) # .strip().split()
     return unknown_handler, []
 
 def main():
