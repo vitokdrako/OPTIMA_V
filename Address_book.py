@@ -57,7 +57,19 @@ class Birthday(Field):
     @property
     def date(self):
         return date(self.__year, self.__month, self.__day)
-        
+
+    @property
+    def day(self):
+        return self.__day
+
+    @property
+    def month(self):
+        return self.__month
+
+    @property
+    def year(self):
+        return self.__year
+
     @value.setter
     def value(self, value: str):
         self.__year, self.__month, self.__day = self.__validate(value)
@@ -72,7 +84,6 @@ class Birthday(Field):
                 if date(int(year), int(month), int(day)):
                     return int(year), int(month), int(day)
         raise ValueError(f"Birthday '{value}' format is incorrect. Use DD-MM-YYYY format")
-
 
 class Record:
     def __init__(self, name: str, phone=None, birthday=None):
