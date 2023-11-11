@@ -119,6 +119,10 @@ class NotesList(UserList):
     def sort_by_tag_count(self):
         sorted_notes = sorted(self.data, key=lambda note: sum(note.tags_dict.values()), reverse=True)
         return sorted_notes
+    
+    def search_by_tag(self, tag: str):
+        return [note for note in self.data if tag in note.tags_dict]
+
 
 notes_list = NotesList()
 notes_list.load_notes_from_file()

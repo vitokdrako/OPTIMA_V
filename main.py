@@ -234,6 +234,17 @@ def search_notes_handler(*args):
         return ""
     else:
         return "No matches found."
+    
+@input_error("tag")
+def search_notes_by_tag_handler(*args):
+    tag = args[0]
+    matches = notes_list.search_by_tag(tag)
+    if matches:
+        for match in matches:
+            print(match)
+        return ""
+    else:
+        return f"No notes found with tag '{tag}'."
 
 
 COMMANDS = {
@@ -254,7 +265,8 @@ COMMANDS = {
             delete_note_handler: "note delete",
             edit_note_by_title_handler: "note edit",
             search_notes_handler: "note search",
-            sort_notes_by_tag_count_handler: "tag sort"
+            sort_notes_by_tag_count_handler: "tag sort",
+            search_notes_by_tag_handler: "tag search"
 
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
