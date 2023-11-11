@@ -2,6 +2,7 @@
 - Під капотом тегів - словник, де ключ - текст тегу, в видрук іде тільки перелік ключів
 - Теги лишаються в тексті нотатки, але дублюються в поле тегів без знаку #
 - Повернула функцію def _parse_tags та оголошення notes_list, бо без нього не працює корректно
+- Ширина 50 для поля тегів та 30 для назви
 """
 
 
@@ -21,7 +22,7 @@ class Note:
         num = notes_list.index(note)+1
         tags = ', '.join(tag for tag in self._tags_dict.keys())
         
-        return ("{:<5} {:<20} {:<20} {:<50}".format(num, note.title, tags, note.text))
+        return ("{:<5} {:<30} {:<50} {:<50}".format(num, note.title, tags, note.text))
 
     @property
     def title(self) -> str:
@@ -101,6 +102,8 @@ notes_list.load_notes_from_file()
 # notes_list.edit(4, "Mark's birthday", "#buy gift for Mark's #birthday")
 
 
-print("{:^5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
-for note in notes_list:
-    print(note)
+# Друк
+
+# print("{:^5} {:<30} {:<50} {:<50}".format("num", "title", "tags", "text"))
+# for note in notes_list:
+#     print(note)
