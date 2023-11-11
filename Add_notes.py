@@ -27,10 +27,19 @@ class Note:
     @property
     def title(self) -> str:
         return self._title
+    
+    @title.setter
+    def title(self, value: str) -> None:
+        self._title = value
 
     @property
     def text(self)  -> str:
         return self._text
+    
+    @text.setter
+    def text(self, value: str) -> None:
+        self._text = value
+        self._parse_tags()
 
     @property
     def tags_dict(self) -> dict:
@@ -74,11 +83,20 @@ class NotesList(UserList):
                 return True
         return False
 
-    def edit(self, num: int, title: str, text: str) -> None:
+    #def edit(self, num: int, title: str, text: str) -> None:
     
-        note = Note(title, text)
-        notes_list[num-1] = note
-        self._save_notes_to_file()
+       # note = Note(title, text)
+       # notes_list[num-1] = note
+       # self._save_notes_to_file()
+
+    def edit_by_title(self, old_title: str, new_title: str, new_text: str) -> bool:
+        for note in self.data:
+            if note.title.lower() == old_title.lower():
+                note.title = new_title
+                note.text = new_text
+                self._save_notes_to_file()
+                return True
+        return False
 
     def _save_notes_to_file(self) -> None:
         with open(self.filename, 'wb') as file:

@@ -197,14 +197,23 @@ def delete_note_handler(*args):
     else:
         return "Note with this title not found."
 
-@input_error("title", "text")
-def edit_note_handler(*args):
-    note_number, title, text = int(args[0]) - 1, args[1], args[2]
-    if 0 <= note_number < len(notes_list):
-        notes_list.edit(note_number, title, text)
+#@input_error("title", "text")
+#def edit_note_handler(*args):
+    #note_number, title, text = int(args[0]) - 1, args[1], args[2]
+    #if 0 <= note_number < len(notes_list):
+      #  notes_list.edit(note_number, title, text)
+      #  return "Note edited successfully."
+   # else:
+      #  return "Invalid note number."
+
+@input_error("old title", "new title", "new text")
+def edit_note_by_title_handler(*args):
+    old_title, new_title, new_text = args[0], args[1], args[2]
+    if notes_list.edit_by_title(old_title, new_title, new_text):
         return "Note edited successfully."
     else:
-        return "Invalid note number."
+        return "Note with this title not found."
+
 
 @input_error("query")
 def search_notes_handler(*args):
@@ -234,7 +243,7 @@ COMMANDS = {
             add_note_handler: "note add",
             show_notes_handler: "note show",
             delete_note_handler: "note delete",
-            edit_note_handler: "note edit",
+            edit_note_by_title_handler: "note edit",
             search_notes_handler: "note search"
 
             }
