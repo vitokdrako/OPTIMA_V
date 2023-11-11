@@ -3,7 +3,7 @@ from Add_notes import Note, NotesList
 import shlex
 
 records = None
-note = Note()
+note = Note("Sample Title", "Sample text for the note.")
 notes_list = NotesList()
 
 def input_error(*expected_args):
@@ -224,11 +224,11 @@ COMMANDS = {
             show_all_handler: "show all",
             show_birthdays_handler: "show birthdays",
             delete_handler: "delete",
-            add_note_handler: "add note",
-            show_notes_handler: "show notes",
-            delete_note_handler: "delete note",
-            edit_note_handler: "edit note",
-            search_notes_handler: "search notes"
+            add_note_handler: "note add",
+            show_notes_handler: "note show",
+            delete_note_handler: "note delete",
+            edit_note_handler: "note edit",
+            search_notes_handler: "note search"
 
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
