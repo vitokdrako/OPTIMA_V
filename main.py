@@ -1,7 +1,9 @@
 from Address_book import AddressBook, Record, DuplicatedPhoneError
+from Add_notes import Note, NotesList
 import shlex
 
-records = None
+records: AddressBook = None
+notes_list = NotesList()
 
 def input_error(*expected_args):
     def input_error_wrapper(func):
@@ -45,7 +47,7 @@ def help_handler():
 
 @capitalize_user_name
 @input_error("name", "phone")
-def add_handler(*args):
+def add_contact_handler(*args):
     user_name = args[0]
     user_phones = args[1:]
     record = records.find(user_name, True)
@@ -63,6 +65,14 @@ def add_handler(*args):
             record.add_phone(user_phone)
             response.append(f"New phone number {user_phone} for contact {user_name} added.")
         return "\n".join(response)
+
+@input_error("title", "text")    
+def add_note_handler(*args):
+    note_title = args[0] if len(args) > 1 else "Untitled"
+    note_text = args[1] if len(args) > 1 else args[0]
+    note = Note(note_title, note_text)
+    notes_list.append(note)
+    return f"New note with title '{note_title}' and text '{note_text}' added."
 
 @capitalize_user_name
 @input_error("name", "old_phone", "new_phone")
@@ -162,21 +172,26 @@ def show_birthdays_handler(*args):
         return "\n".join(str(contact) for contact in contacts)
     return f"No contacts have birthdays within following {days} days."
 
+def show_notes_handler(*args):
+    return "\n".join(notes_list.output_notes())
+
 @input_error([])
-def show_all_handler(*args):
+def show_contacts_handler(*args):
     return records.iterator()
 
 COMMANDS = {
             help_handler(): "help",
             greeting_handler: "hello",
             address_handler: "address",
-            add_handler: "add",
+            add_note_handler: "add note",
+            add_contact_handler: "add contact",
             change_handler: "change",
             phone_handler: "phone",
             search_handler: "search",
             birthday_handler: "birthday",
             email_handler: "email",
-            show_all_handler: "show all",
+            show_contacts_handler: "show contacts",
+            show_notes_handler: "show notes",
             show_birthdays_handler: "show birthdays",
             delete_handler: "delete"
             }
