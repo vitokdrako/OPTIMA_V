@@ -83,6 +83,13 @@ class NotesList(UserList):
         except (FileNotFoundError, EOFError):
             self.data = []
 
+    def search(self, query):
+        matches = []
+        for note in self.data:
+            if query.lower() in note.text.lower() or query.lower() in note.title.lower():
+                matches.append(note)
+        return matches
+
 notes_list = NotesList()
 notes_list.load_notes_from_file()
 
