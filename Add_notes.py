@@ -19,10 +19,10 @@ class Note:
         self._parse_tags()
 
     def __str__(self) -> str:
-        num = notes_list.index(self) + 1  
         tags = ', '.join(tag for tag in self._tags_dict.keys())
-        
-        return ("{:<5} {:<30} {:<50} {:<50}".format(num, self._title, tags, self._text))
+        title_str = self._title if self._title is not None else ""
+        text_str = self._text if self._text is not None else ""
+        return f"Title: {title_str}\nText: {text_str}\nTags: {tags}"
 
     @property
     def title(self) -> str:
