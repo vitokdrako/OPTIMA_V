@@ -169,6 +169,48 @@ def show_birthdays_handler(*args):
 def show_all_handler(*args):
     return records.iterator()
 
+@input_error("title", "text")
+def add_note_handler(*args):
+    title, text = args
+    new_note = Note(title, text)
+    notes_list.append(new_note)
+    return "Note added successfully."
+
+def show_notes_handler():
+    for note in notes_list:
+        print(note)
+    return ""
+
+@input_error("note number")
+def delete_note_handler(*args):
+    note_number = int(args[0]) - 1
+    if 0 <= note_number < len(notes_list):
+        notes_list.remove(note_number)
+        return "Note deleted successfully."
+    else:
+        return "Invalid note number."
+
+@input_error("title", "text")
+def edit_note_handler(*args):
+    note_number, title, text = int(args[0]) - 1, args[1], args[2]
+    if 0 <= note_number < len(notes_list):
+        notes_list.edit(note_number, title, text)
+        return "Note edited successfully."
+    else:
+        return "Invalid note number."
+
+@input_error("query")
+def search_notes_handler(*args):
+    query = args[0]
+    matches = notes_list.search(query)
+    if matches:
+        for match in matches:
+            print(match)
+        return ""
+    else:
+        return "No matches found."
+
+
 COMMANDS = {
             help_handler(): "help",
             greeting_handler: "hello",
