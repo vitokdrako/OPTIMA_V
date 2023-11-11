@@ -180,14 +180,22 @@ def show_notes_handler():
         print(note)
     return ""
 
-@input_error("note number")
+#@input_error("note number")
+#def delete_note_handler(*args):
+#    note_number = int(args[0]) - 1
+#    if 0 <= note_number < len(notes_list):
+#        notes_list.remove(note_number)
+#        return "Note deleted successfully."
+#    else:
+#        return "Invalid note number."
+
+@input_error("title")
 def delete_note_handler(*args):
-    note_number = int(args[0]) - 1
-    if 0 <= note_number < len(notes_list):
-        notes_list.remove(note_number)
+    title = " ".join(args)
+    if notes_list.remove_by_title(title):
         return "Note deleted successfully."
     else:
-        return "Invalid note number."
+        return "Note with this title not found."
 
 @input_error("title", "text")
 def edit_note_handler(*args):

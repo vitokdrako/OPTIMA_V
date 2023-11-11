@@ -62,9 +62,17 @@ class NotesList(UserList):
         super().append(note)
         self._save_notes_to_file()
 
-    def remove(self, num: int) -> None:
-        notes_list.pop(num-1)
-        self._save_notes_to_file()
+    #def remove(self, num: int) -> None:
+       # notes_list.pop(num-1)
+       # self._save_notes_to_file()
+
+    def remove_by_title(self, title: str) -> bool:
+        for i, note in enumerate(self.data):
+            if note.title.lower() == title.lower():
+                del self.data[i]
+                self._save_notes_to_file()
+                return True
+        return False
 
     def edit(self, num: int, title: str, text: str) -> None:
     
