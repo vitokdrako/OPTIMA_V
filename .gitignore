@@ -1,3 +1,4 @@
+**/*.bin
 **/*.pkl
 __pycache__/**/*
 .idea/
