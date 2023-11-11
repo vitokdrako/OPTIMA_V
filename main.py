@@ -1,5 +1,14 @@
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 import shlex
+import sys
+from pathlib import Path
+import shutil
+import re
+
+from Address_book import AddressBook, Record, DuplicatedPhoneError
+import shlex
+
+from sorting import sort_folders_and_return_result
 
 records = None
 
@@ -166,6 +175,18 @@ def show_birthdays_handler(*args):
 def show_all_handler(*args):
     return records.iterator()
 
+def sort_files_handler(*args):
+    try:
+        folder_path = Path(args[0])
+    except IndexError:
+        return "Please provide the path to the folder you want to sort."
+
+    if not folder_path.exists():
+        return "The specified folder does not exist."
+
+    result = sort_folders_and_return_result(folder_path)
+    return result
+
 COMMANDS = {
             help_handler(): "help",
             greeting_handler: "hello",
@@ -178,7 +199,8 @@ COMMANDS = {
             email_handler: "email",
             show_all_handler: "show all",
             show_birthdays_handler: "show birthdays",
-            delete_handler: "delete"
+            delete_handler: "delete",
+            sort_files_handler: "sort files",
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
@@ -199,12 +221,19 @@ def main():
                 break
             
             func, data = parser(user_input)
+            
+            if func == sort_files_handler:
+                result = func(*data)
+                print(result)
+                continue
+            
             result = func(*data)
+            
             if isinstance(result, str):
                 print(result)
             else:
                 for i in result:                
-                    print ("\n".join(i))
+                    print("\n".join(i))
                     input("Press enter to show more records")
 
 
