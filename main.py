@@ -45,6 +45,15 @@ def help_handler():
         return help_txt
     return inner
 
+def sort_notes_by_tag_count_handler():
+    sorted_notes = notes_list.sort_by_tag_count()
+    if sorted_notes:
+        for note in sorted_notes:
+            print(note)
+        return ""
+    else:
+        return "No notes to sort."
+
 @capitalize_user_name
 @input_error("name", "phone")
 def add_handler(*args):
@@ -244,7 +253,8 @@ COMMANDS = {
             show_notes_handler: "note show",
             delete_note_handler: "note delete",
             edit_note_by_title_handler: "note edit",
-            search_notes_handler: "note search"
+            search_notes_handler: "note search",
+            sort_notes_by_tag_count_handler: "tag sort"
 
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}

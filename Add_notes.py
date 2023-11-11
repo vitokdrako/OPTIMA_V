@@ -115,6 +115,10 @@ class NotesList(UserList):
             if query.lower() in note.text.lower() or query.lower() in note.title.lower():
                 matches.append(note)
         return matches
+    
+    def sort_by_tag_count(self):
+        sorted_notes = sorted(self.data, key=lambda note: sum(note.tags_dict.values()), reverse=True)
+        return sorted_notes
 
 notes_list = NotesList()
 notes_list.load_notes_from_file()
