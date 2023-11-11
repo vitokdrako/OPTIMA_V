@@ -1,7 +1,10 @@
 from Address_book import AddressBook, Record, DuplicatedPhoneError
+from Add_notes import Note, NotesList
 import shlex
 
 records = None
+note = Note()
+notes_list = NotesList()
 
 def input_error(*expected_args):
     def input_error_wrapper(func):
