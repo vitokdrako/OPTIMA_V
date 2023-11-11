@@ -27,6 +27,24 @@ search [term]
 show all
  - Prints all contacts info
 
+note add "title" "text"
+Додає нову нотатку з заголовком і текстом.
+
+note show
+Відображає всі збережені нотатки.
+
+note delete [title]
+Видаляє нотатку за вказаним заголовком.
+
+note edit "old title" "new title" "new text"
+Редагує нотатку за її старим заголовком, змінюючи на новий заголовок і текст.
+
+note search "query"
+Шукає нотатки за запитом у тексті або заголовку.
+
+tag sort
+Сортує нотатки за кількістю тегів від найбільшої до найменшої.
+
 good bye
 close
 exit
