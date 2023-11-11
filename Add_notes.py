@@ -22,7 +22,7 @@ class Note:
         num = notes_list.index(self) + 1  
         tags = ', '.join(tag for tag in self._tags_dict.keys())
         
-        return ("{:<5} {:<30} {:<50} {:<50}".format(num, note.title, tags, note.text))
+        return ("{:<5} {:<30} {:<50} {:<50}".format(num, self._title, tags, self._text))
 
     @property
     def title(self) -> str:
