@@ -114,9 +114,9 @@ class Record:
     def __init__(self, name: str, phone=None, birthday=None, address=None, email=None):
         self.name = Name(name)
         self.phones = [Phone(phone)] if phone else []
-        self.birthday = Birthday(birthday) if birthday else "Birthday - not set"
-        self.address = Address(address) if address else "Address - not set"
-        self.email = Email(email) if email else "Email - not set"
+        self.birthday = Birthday(birthday) if birthday else "not set"
+        self.address = Address(address) if address else "not set"
+        self.email = Email(email) if email else "not set"
 
     def __str__(self):
         return f"Contact name: {self.name}, phones: {'; '.join(p.value for p in self.phones)}, email: {self.email}, birthday: {self.birthday}, address: {self.address}"
