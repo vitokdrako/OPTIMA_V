@@ -223,7 +223,13 @@ COMMANDS = {
             email_handler: "email",
             show_all_handler: "show all",
             show_birthdays_handler: "show birthdays",
-            delete_handler: "delete"
+            delete_handler: "delete",
+            add_note_handler: "add note",
+            show_notes_handler: "show notes",
+            delete_note_handler: "delete note",
+            edit_note_handler: "edit note",
+            search_notes_handler: "search notes"
+
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
