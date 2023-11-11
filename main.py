@@ -3,7 +3,6 @@ from Add_notes import Note, NotesList
 import shlex
 
 records = None
-note = Note("Sample Title", "Sample text for the note.")
 notes_list = NotesList()
 
 def input_error(*expected_args):
