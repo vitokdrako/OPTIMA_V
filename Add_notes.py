@@ -2,7 +2,6 @@
 - Під капотом тегів - словник, де ключ - текст тегу, в видрук іде тільки перелік ключів
 - Теги лишаються в тексті нотатки, але дублюються в поле тегів без знаку #
 - Повернула функцію def _parse_tags та оголошення notes_list, бо без нього не працює корректно
-- Ширина 50 для поля тегів та 30 для назви
 """
 
 
@@ -19,10 +18,9 @@ class Note:
         self._parse_tags()
 
     def __str__(self) -> str:
-        num = notes_list.index(note)+1
+        #num = notes_list.index(note)+1
         tags = ', '.join(tag for tag in self._tags_dict.keys())
-        
-        return ("{:<5} {:<30} {:<50} {:<50}".format(num, note.title, tags, note.text))
+        return "{:<20} {:<20} {:<50}".format(self.title, tags, self.text)
 
     @property
     def title(self) -> str:
@@ -57,19 +55,19 @@ class NotesList(UserList):
     def __init__(self) -> None:
         super().__init__()
         self.filename = "notes.bin"
+        self.load_notes_from_file()
 
     def append(self, note) -> None:
         super().append(note)
         self._save_notes_to_file()
 
     def remove(self, num: int) -> None:
-        notes_list.pop(num-1)
+        self.data.pop(num-1)
         self._save_notes_to_file()
 
     def edit(self, num: int, title: str, text: str) -> None:
-    
         note = Note(title, text)
-        notes_list[num-1] = note
+        self.data[num-1] = note
         self._save_notes_to_file()
 
     def _save_notes_to_file(self) -> None:
@@ -82,9 +80,17 @@ class NotesList(UserList):
                 self.data = pickle.load(file)
         except (FileNotFoundError, EOFError):
             self.data = []
+    
+    def output_notes(self):
+        output = []
+        output.append("{:<5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
+        output += list(map(lambda note: f"{(self.data.index(note)+1):<5} {str(note)}" , self.data))
+        return output
 
-notes_list = NotesList()
-notes_list.load_notes_from_file()
+
+
+# notes_list = NotesList()
+# notes_list.load_notes_from_file()
 
 # Test commands
 
@@ -94,16 +100,14 @@ notes_list.load_notes_from_file()
 # note2 = Note("Purchase list", "Potatoes, bread, milk #buy #food")
 # notes_list.append(note2)
 
-# note3 = Note("Bill's B_day", "Dec,12 #birthday #buy_gift")
+# note3 = Note("Bill's B_day", "Dec,12 #birthday #buy_gift #dfkfgdkhgd #ksdksdk")
 # notes_list.append(note3)
 
-# notes_list.remove(4)     # видалення нотатки за номером
+# # notes_list.remove(4)     # видалення нотатки за номером
 
 # notes_list.edit(4, "Mark's birthday", "#buy gift for Mark's #birthday")
 
 
-# Друк
-
-# print("{:^5} {:<30} {:<50} {:<50}".format("num", "title", "tags", "text"))
+# print("{:^5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
 # for note in notes_list:
 #     print(note)
