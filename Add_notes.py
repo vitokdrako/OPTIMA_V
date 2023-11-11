@@ -19,7 +19,7 @@ class Note:
         self._parse_tags()
 
     def __str__(self) -> str:
-        num = notes_list.index(note)+1
+        num = notes_list.index(self) + 1  
         tags = ', '.join(tag for tag in self._tags_dict.keys())
         
         return ("{:<5} {:<30} {:<50} {:<50}".format(num, note.title, tags, note.text))
