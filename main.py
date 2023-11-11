@@ -18,8 +18,8 @@ def input_error(*expected_args):
                 return f"Phone format '{args[1]}' is incorrect. Use digits only for phone number."
             except DuplicatedPhoneError as phone_error:
                 return f"Phone number {phone_error.args[1]} already exists for contact {phone_error.args[0]}."
-            except AttributeError:
-                return f"Contact {args[0]} doesn't have birthday yet."
+            # except AttributeError:
+            #     return f"Contact {args[0]} doesn't have birthday yet."
         return inner
     return input_error_wrapper
 
@@ -54,7 +54,9 @@ def add_handler(*args):
         for user_phone in user_phones:
             record.add_phone(user_phone)
         records.add_record(record)
-        return f"New record added for {user_name} with phone number{'s' if len(user_phones) > 1 else ''}: {'; '.join(user_phones)}."
+        if user_phones:
+            return f"New record added for {user_name} with phone number{'s' if len(user_phones) > 1 else ''}: {'; '.join(user_phones)}."
+        return f"New record added for {user_name}."
     else:
         response = []
         for user_phone in user_phones:
@@ -152,6 +154,14 @@ def search_handler(*args):
         return "\n".join(str(contact) for contact in contacts)
     return f"No contacts found for '{term}'."
 
+@input_error("days")
+def show_birthdays_handler(*args):
+    days = int(args[0])
+    contacts = records.contacts_upcoming_birthdays(days)
+    if contacts:
+        return "\n".join(str(contact) for contact in contacts)
+    return f"No contacts have birthdays within following {days} days."
+
 @input_error([])
 def show_all_handler(*args):
     return records.iterator()
@@ -167,6 +177,7 @@ COMMANDS = {
             birthday_handler: "birthday",
             email_handler: "email",
             show_all_handler: "show all",
+            show_birthdays_handler: "show birthdays",
             delete_handler: "delete"
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
