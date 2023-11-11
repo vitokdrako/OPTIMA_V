@@ -28,22 +28,22 @@ show all
  - Prints all contacts info
 
 note add "title" "text"
-Додає нову нотатку з заголовком і текстом.
+Adds a new note with a title and text.
 
 note show
-Відображає всі збережені нотатки.
+ - Displays all saved notes.
 
 note delete [title]
-Видаляє нотатку за вказаним заголовком.
+ - Deletes the note with the specified title.
 
 note edit "old title" "new title" "new text"
-Редагує нотатку за її старим заголовком, змінюючи на новий заголовок і текст.
+ - Edits a note by its old title, changing it to a new title and text.
 
 note search "query"
-Шукає нотатки за запитом у тексті або заголовку.
+ - Searches for notes by a query in the text or title.
 
 tag sort
-Сортує нотатки за кількістю тегів від найбільшої до найменшої.
+ - Sorts notes by the number of tags from the most to the least.
 
 good bye
 close
