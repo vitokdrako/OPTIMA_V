@@ -175,6 +175,7 @@ def show_birthdays_handler(*args):
 def show_all_handler(*args):
     return records.iterator()
 
+@input_error("path")
 def sort_files_handler(*args):
     try:
         folder_path = Path(args[0])
