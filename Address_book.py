@@ -132,11 +132,12 @@ class Record:
         self.birthday = Birthday(birthday)
 
     def days_to_birthday(self) -> int:
-        next_birthday = self.birthday.date.replace(year=date.today().year)
-        if next_birthday < date.today():
-            next_birthday = next_birthday.replace(year=next_birthday.year+1)
-        delta = next_birthday - date.today()
-        return delta.days
+        if isinstance(self.birthday, Birthday):
+            next_birthday = self.birthday.date.replace(year=date.today().year)
+            if next_birthday < date.today():
+                next_birthday = next_birthday.replace(year=next_birthday.year+1)
+            delta = next_birthday - date.today()
+            return delta.days
 
     def edit_phone(self, old_phone: str, new_phone: str):
         existing_phone = self.find_phone(old_phone)
@@ -211,19 +212,8 @@ class AddressBook(UserDict):
         result = list(filter(lambda contact: term in contact.name.value.lower() or contact.has_phone(term), self.data.values()))
         return result
 
-    def contacts_upcoming_birthdays(self, n=7):
-        today = datetime.now()
-        upcoming_birthdays = []
-
-        for contact in self.data.values():
-            if contact.birthday:
-                next_birthday = datetime(today.year, contact.birthday.month, contact.birthday.day)
-                if next_birthday < today:
-                    next_birthday = datetime(today.year + 1, contact.birthday.month, contact.birthday.day)
-
-                days_until_birthday = (next_birthday - today).days
-                if 0 <= days_until_birthday <= n:
-                    upcoming_birthdays.append(contact)
-
+    def contacts_upcoming_birthdays(self, n=7):        
+        contacts_with_birthdays = filter(lambda contact: isinstance(contact.birthday, Birthday), self.data.values())
+        upcoming_birthdays = filter(lambda contact: contact.days_to_birthday() <= n, contacts_with_birthdays)
         return upcoming_birthdays
 

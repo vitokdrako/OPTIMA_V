@@ -19,7 +19,7 @@ class Note:
 
     def __str__(self) -> str:
         tags = ', '.join(tag for tag in self._tags_dict.keys())
-        return "{:<20} {:<20} {:<50}".format(self.title, tags, self.text)
+        return "{:<30} {:<50} {:<50}".format(self.title, tags, self.text)
 
     @property
     def title(self) -> str:
@@ -113,7 +113,7 @@ class NotesList(UserList):
     
     def output_notes(self):
         output = []
-        output.append("{:<5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
+        output.append("{:<5} {:<30} {:<50} {:<50}".format("num", "title", "tags", "text"))
         output += list(map(lambda note: f"{(self.data.index(note)+1):<5} {str(note)}" , self.data))
         return output
 
