@@ -1,9 +1,10 @@
 import re
 import pickle
 from pathlib import Path
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from functools import reduce
 from collections import UserDict
+
 
 class DuplicatedPhoneError(Exception):
     ...
@@ -109,6 +110,7 @@ class Birthday(Field):
                 if date(int(year), int(month), int(day)):
                     return int(year), int(month), int(day)
         raise ValueError(f"Birthday '{value}' format is incorrect. Use DD-MM-YYYY format")
+
 
 class Record:
     def __init__(self, name: str, phone=None, birthday=None, address=None, email=None):
@@ -216,4 +218,3 @@ class AddressBook(UserDict):
         contacts_with_birthdays = filter(lambda contact: isinstance(contact.birthday, Birthday), self.data.values())
         upcoming_birthdays = filter(lambda contact: contact.days_to_birthday() <= n, contacts_with_birthdays)
         return upcoming_birthdays
-
