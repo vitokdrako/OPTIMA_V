@@ -2,7 +2,6 @@
 - Під капотом тегів - словник, де ключ - текст тегу, в видрук іде тільки перелік ключів
 - Теги лишаються в тексті нотатки, але дублюються в поле тегів без знаку #
 - Повернула функцію def _parse_tags та оголошення notes_list, бо без нього не працює корректно
-- Ширина 50 для поля тегів та 30 для назви
 """
 
 
@@ -111,6 +110,12 @@ class NotesList(UserList):
                 self.data = pickle.load(file)
         except (FileNotFoundError, EOFError):
             self.data = []
+    
+    def output_notes(self):
+        output = []
+        output.append("{:<5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
+        output += list(map(lambda note: f"{(self.data.index(note)+1):<5} {str(note)}" , self.data))
+        return output
 
     def search(self, query):
         matches = []

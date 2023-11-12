@@ -2,7 +2,7 @@ from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Add_notes import Note, NotesList
 import shlex
 
-records = None
+records: AddressBook = None
 notes_list = NotesList()
 
 def input_error(*expected_args):
@@ -47,7 +47,7 @@ def help_handler():
 
 @capitalize_user_name
 @input_error("name", "phone")
-def add_handler(*args):
+def add_contact_handler(*args):
     user_name = args[0]
     user_phones = args[1:]
     record = records.find(user_name, True)
@@ -66,9 +66,17 @@ def add_handler(*args):
             response.append(f"New phone number {user_phone} for contact {user_name} added.")
         return "\n".join(response)
 
+@input_error("title", "text")    
+def add_note_handler(*args):
+    note_title = args[0] if len(args) > 1 else "Untitled"
+    note_text = args[1] if len(args) > 1 else args[0]
+    note = Note(note_title, note_text)
+    notes_list.append(note)
+    return f"New note with title '{note_title}' and text '{note_text}' added."
+
 @capitalize_user_name
 @input_error("name", "old_phone", "new_phone")
-def change_handler(*args):
+def edit_contact_handler(*args):
     user_name = args[0]
     old_phone = args[1]
     new_phone = args[2]
@@ -118,7 +126,7 @@ def email_handler(*args):
 
 @capitalize_user_name    
 @input_error("name")
-def delete_handler(*args):
+def delete_contact_handler(*args):
     user_name = args[0]
     user_phones = args[1:]
     if len(user_phones) >= 1:
@@ -148,13 +156,13 @@ def phone_handler(*args):
     if record:
         return "; ".join(p.value for p in record.phones)
 
-@input_error("term")
-def search_handler(*args):
-    term: str = args[0]
-    contacts = records.search_contacts(term)
+@input_error("query")
+def search_contact_handler(*args):
+    query: str = args[0]
+    contacts = records.search_contacts(query)
     if contacts:
         return "\n".join(str(contact) for contact in contacts)
-    return f"No contacts found for '{term}'."
+    return f"No contacts found for '{query}'."
 
 @input_error("days")
 def show_birthdays_handler(*args):
@@ -164,32 +172,14 @@ def show_birthdays_handler(*args):
         return "\n".join(str(contact) for contact in contacts)
     return f"No contacts have birthdays within following {days} days."
 
+def show_notes_handler(*args):
+    return "\n".join(notes_list.output_notes())
+
 @input_error([])
-def show_all_handler(*args):
+def show_contacts_handler(*args):
     return records.iterator()
 
-@input_error("title", "text")
-def add_note_handler(*args):
-    title, text = args
-    new_note = Note(title, text)
-    notes_list.append(new_note)
-    return "Note added successfully."
-
-def show_notes_handler():
-    for note in notes_list:
-        print(note)
-    return ""
-
-#@input_error("note number")
-#def delete_note_handler(*args):
-#    note_number = int(args[0]) - 1
-#    if 0 <= note_number < len(notes_list):
-#        notes_list.remove(note_number)
-#        return "Note deleted successfully."
-#    else:
-#        return "Invalid note number."
-
-@input_error("param")
+@input_error("title or number")
 def delete_note_handler(*args):
     param = " ".join(args)
     if notes_list.remove(param):
@@ -197,16 +187,7 @@ def delete_note_handler(*args):
     else:
         return "Note with this title not found."
 
-#@input_error("title", "text")
-#def edit_note_handler(*args):
-    #note_number, title, text = int(args[0]) - 1, args[1], args[2]
-    #if 0 <= note_number < len(notes_list):
-      #  notes_list.edit(note_number, title, text)
-      #  return "Note edited successfully."
-   # else:
-      #  return "Invalid note number."
-
-@input_error("param", "new title", "new text")
+@input_error("old title or number", "new title", "new text")
 def edit_note_handler(*args):
     param, new_title, new_text = args[0], args[1], args[2]
     if notes_list.edit(param, new_title, new_text):
@@ -242,31 +223,31 @@ def sort_notes_by_tag_count_handler():
 
 COMMANDS = {
             help_handler(): "help",
-            greeting_handler: "hello",
-            address_handler: "address",
-            add_handler: "add",
-            change_handler: "change",
+            greeting_handler: "hello",                        
+            add_contact_handler: "add contact",
+            delete_contact_handler: "delete contact",
+            edit_contact_handler: "edit contact",
             phone_handler: "phone",
-            search_handler: "search",
+            address_handler: "address",            
             birthday_handler: "birthday",
             email_handler: "email",
-            show_all_handler: "show all",
-            show_birthdays_handler: "show birthdays",
-            delete_handler: "delete",
-            add_note_handler: "note add",
-            show_notes_handler: "note show",
-            delete_note_handler: "note delete",
-            edit_note_handler: "note edit",
-            search_notes_handler: "note search",
-            sort_notes_by_tag_count_handler: "tag sort",
-            search_notes_by_tag_handler: "tag search"
+            search_contact_handler: "search contact",
+            show_contacts_handler: "show contacts",            
+            show_birthdays_handler: "show birthdays",            
+            add_note_handler: "add note",
+            delete_note_handler: "delete note",
+            edit_note_handler: "edit note",
+            search_notes_handler: "search note",
+            search_notes_by_tag_handler: "search note tag",
+            show_notes_handler: "show notes",            
+            sort_notes_by_tag_count_handler: "tag sort"            
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.startswith(kw):
-            return func, shlex.split(text[len(kw):]) # .strip().split()
+            return func, shlex.split(text[len(kw):])
     return unknown_handler, []
 
 def main():
