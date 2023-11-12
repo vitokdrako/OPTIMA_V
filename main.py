@@ -1,7 +1,9 @@
 from Address_book import AddressBook, Record, DuplicatedPhoneError
+from Add_notes import Note, NotesList
 import shlex
 
 records = None
+notes_list = NotesList()
 
 def input_error(*expected_args):
     def input_error_wrapper(func):
@@ -166,6 +168,78 @@ def show_birthdays_handler(*args):
 def show_all_handler(*args):
     return records.iterator()
 
+@input_error("title", "text")
+def add_note_handler(*args):
+    title, text = args
+    new_note = Note(title, text)
+    notes_list.append(new_note)
+    return "Note added successfully."
+
+def show_notes_handler():
+    for note in notes_list:
+        print(note)
+    return ""
+
+#@input_error("note number")
+#def delete_note_handler(*args):
+#    note_number = int(args[0]) - 1
+#    if 0 <= note_number < len(notes_list):
+#        notes_list.remove(note_number)
+#        return "Note deleted successfully."
+#    else:
+#        return "Invalid note number."
+
+@input_error("param")
+def delete_note_handler(*args):
+    param = " ".join(args)
+    if notes_list.remove(param):
+        return "Note deleted successfully."
+    else:
+        return "Note with this title not found."
+
+#@input_error("title", "text")
+#def edit_note_handler(*args):
+    #note_number, title, text = int(args[0]) - 1, args[1], args[2]
+    #if 0 <= note_number < len(notes_list):
+      #  notes_list.edit(note_number, title, text)
+      #  return "Note edited successfully."
+   # else:
+      #  return "Invalid note number."
+
+@input_error("param", "new title", "new text")
+def edit_note_handler(*args):
+    param, new_title, new_text = args[0], args[1], args[2]
+    if notes_list.edit(param, new_title, new_text):
+        return f"Note '{param}' edited successfully."
+    else:
+        return f"No notes found by the specified param '{param}'."
+
+
+@input_error("query")
+def search_notes_handler(*args):
+    query = args[0]
+    matches = notes_list.search(query)
+    if matches:
+        return "\n".join(map(lambda note: str(note), matches))
+    else:
+        return f"No notes found for query '{query}'."
+    
+@input_error("tag")
+def search_notes_by_tag_handler(*args):
+    tag = args[0]
+    matches = notes_list.search_by_tag(tag)
+    if matches:
+        return "\n".join(map(lambda note: str(note), matches))
+    else:
+        return f"No notes found with tag '{tag}'."
+
+def sort_notes_by_tag_count_handler():
+    sorted_notes = notes_list.sort_by_tag_count()
+    if sorted_notes:
+        return "\n".join(map(lambda note: str(note), sorted_notes))
+    else:
+        return "No notes to sort."
+
 COMMANDS = {
             help_handler(): "help",
             greeting_handler: "hello",
@@ -178,7 +252,14 @@ COMMANDS = {
             email_handler: "email",
             show_all_handler: "show all",
             show_birthdays_handler: "show birthdays",
-            delete_handler: "delete"
+            delete_handler: "delete",
+            add_note_handler: "note add",
+            show_notes_handler: "note show",
+            delete_note_handler: "note delete",
+            edit_note_handler: "note edit",
+            search_notes_handler: "note search",
+            sort_notes_by_tag_count_handler: "tag sort",
+            search_notes_by_tag_handler: "tag search"
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
