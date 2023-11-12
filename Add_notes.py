@@ -18,17 +18,25 @@ class Note:
         self._parse_tags()
 
     def __str__(self) -> str:
-        #num = notes_list.index(note)+1
         tags = ', '.join(tag for tag in self._tags_dict.keys())
         return "{:<20} {:<20} {:<50}".format(self.title, tags, self.text)
 
     @property
     def title(self) -> str:
         return self._title
+    
+    @title.setter
+    def title(self, value: str) -> None:
+        self._title = value
 
     @property
     def text(self)  -> str:
         return self._text
+    
+    @text.setter
+    def text(self, value: str) -> None:
+        self._text = value
+        self._parse_tags()
 
     @property
     def tags_dict(self) -> dict:
@@ -61,14 +69,36 @@ class NotesList(UserList):
         super().append(note)
         self._save_notes_to_file()
 
-    def remove(self, num: int) -> None:
-        self.data.pop(num-1)
-        self._save_notes_to_file()
+    def remove(self, param: str) -> None:
+        index = None
+        if param.isdigit():
+            index = int(param) - 1            
+        else:
+            for i, note in enumerate(self.data):
+                if note.title.lower() == param.lower():
+                    index = i
+                    break
+        if index is not None:                  
+            del self.data[index]
+            self._save_notes_to_file()
+            return True
+        return False
 
-    def edit(self, num: int, title: str, text: str) -> None:
-        note = Note(title, text)
-        self.data[num-1] = note
-        self._save_notes_to_file()
+    def edit(self, param: str, title:str, text:str) -> bool:
+        index = None
+        if param.isdigit():
+            index = int(param) -1            
+        else:
+            for i, note in enumerate(self.data):
+                if note.title.lower() == param.lower():
+                    index = i
+                    break
+        if index is not None:                     
+            note = Note(title, text)
+            self.data[index] = note
+            self._save_notes_to_file()
+            return True
+        return False
 
     def _save_notes_to_file(self) -> None:
         with open(self.filename, 'wb') as file:
@@ -86,3 +116,18 @@ class NotesList(UserList):
         output.append("{:<5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
         output += list(map(lambda note: f"{(self.data.index(note)+1):<5} {str(note)}" , self.data))
         return output
+
+    def search(self, query):
+        matches = []
+        for note in self.data:
+            if query.lower() in note.text.lower() or query.lower() in note.title.lower():
+                matches.append(note)
+        return matches
+    
+    def sort_by_tag_count(self):
+        sorted_notes = sorted(self.data, key=lambda note: sum(note.tags_dict.values()), reverse=True)
+        return sorted_notes
+    
+    def search_by_tag(self, tag: str):
+        notes = [note for note in self.data if tag in note.tags_dict]
+        return sorted(notes, key=lambda note: note.tags_dict[tag], reverse=True)
