@@ -86,28 +86,3 @@ class NotesList(UserList):
         output.append("{:<5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
         output += list(map(lambda note: f"{(self.data.index(note)+1):<5} {str(note)}" , self.data))
         return output
-
-
-
-# notes_list = NotesList()
-# notes_list.load_notes_from_file()
-
-# Test commands
-
-# note1 = Note("Birthday Party", "John's #birdhday party on Friday")
-# notes_list.append(note1)  # Автоматичне збереження при додаванні
-
-# note2 = Note("Purchase list", "Potatoes, bread, milk #buy #food")
-# notes_list.append(note2)
-
-# note3 = Note("Bill's B_day", "Dec,12 #birthday #buy_gift #dfkfgdkhgd #ksdksdk")
-# notes_list.append(note3)
-
-# # notes_list.remove(4)     # видалення нотатки за номером
-
-# notes_list.edit(4, "Mark's birthday", "#buy gift for Mark's #birthday")
-
-
-# print("{:^5} {:<20} {:<20} {:<50}".format("num", "title", "tags", "text"))
-# for note in notes_list:
-#     print(note)
