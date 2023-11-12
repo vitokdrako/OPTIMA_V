@@ -21,6 +21,8 @@ known_formats, other_formats = set(), set()
 
 dict_of_files_for_duplicates = {}
 
+root_path: Path = None
+
 CYRILLIC_SYMBOLS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяєіїґ"
 TRANSLATION = ("a", "b", "v", "g", "d", "e", "e", "j", "z", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
                "f", "h", "ts", "ch", "sh", "sch", "", "y", "", "e", "yu", "ya", "je", "i", "ji", "g")
@@ -40,6 +42,7 @@ def normalize(name_of_path:str) -> str:
 
 
 def define_category(file_format:str) -> str:
+    file_format = file_format.lower()
     if [k for k in CATEGORIES if file_format in CATEGORIES[k]]:
         return [d for d in CATEGORIES if file_format in CATEGORIES[d]][0]
     else:
@@ -75,7 +78,7 @@ def removing_folders(current_folder:Path) -> None:
         removing_folders(current_folder.parent)
 
 
-def sort_folders(path:Path) -> None:    
+def sort_folders(path:Path) -> None:        
     for i in path.iterdir():
         new_name = normalize(i.name.replace(i.suffix,'')) 
         
@@ -89,7 +92,7 @@ def sort_folders(path:Path) -> None:
                 
         if i.is_file():
             category = define_category(i.suffix)
-            target_path_to_create = Path(sys.argv[1]).joinpath(category)
+            target_path_to_create = Path(root_path).joinpath(category)
             
             if not target_path_to_create.exists():
                 target_path_to_create.mkdir()
@@ -99,7 +102,7 @@ def sort_folders(path:Path) -> None:
                 
             new_name = new_name + '_' + str(count_of_duplicates) + i.suffix if count_of_duplicates > 1 else new_name + i.suffix
             
-            destination_folder = Path(sys.argv[1]).joinpath(category, new_name)  
+            destination_folder = Path(root_path).joinpath(category, new_name)  
             i.replace(destination_folder)
             
             if category == 'archives':
@@ -108,9 +111,11 @@ def sort_folders(path:Path) -> None:
             removing_folders(i.parent)
 
 
-def sort_folders_and_return_result(path: Path) -> str:
+def sort_folders_and_return_result(path: str) -> str:
+    global root_path
     create_translation_dict()
-    sort_folders(path)
+    root_path = Path(path)
+    sort_folders(Path(path))
 
     result = ""
     for k, v in dict_of_categories_files.items():
@@ -120,30 +125,30 @@ def sort_folders_and_return_result(path: Path) -> str:
     
     return result
 
-def main() -> None:
-    try:
-        path = Path(sys.argv[1])
-    except IndexError:
-        print('Шлях до теки не вказаний')
-        return
+# def main() -> None:
+#     try:
+#         path = Path(sys.argv[1])
+#     except IndexError:
+#         print('Шлях до теки не вказаний')
+#         return
 
-    if not path.exists():
-        print('Тека не існує')
-        return
+#     if not path.exists():
+#         print('Тека не існує')
+#         return
 
-    create_translation_dict()
-    sort_folders(path)
+#     create_translation_dict()
+#     sort_folders(path)
 
-    # Визначте ім'я файлу для зберігання результатів
-    output_filename = 'output.txt'
+#     # Визначте ім'я файлу для зберігання результатів
+#     output_filename = 'output.txt'
 
-    with open(output_filename, 'w', encoding='utf-8') as output_file:
-        for k, v in dict_of_categories_files.items():
-            output_file.write(f'{k.upper():^100}\n{v}\n\n')
+#     with open(output_filename, 'w', encoding='utf-8') as output_file:
+#         for k, v in dict_of_categories_files.items():
+#             output_file.write(f'{k.upper():^100}\n{v}\n\n')
 
-        output_file.write(f'known_formats={known_formats}\nother_formats={other_formats}')
+#         output_file.write(f'known_formats={known_formats}\nother_formats={other_formats}')
 
-    print(f'Результати збережено у файлі {output_filename}')
+#     print(f'Результати збережено у файлі {output_filename}')
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

@@ -207,7 +207,7 @@ EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.startswith(kw):
-            return func, shlex.split(text[len(kw):]) # .strip().split()
+            return func, shlex.split(text[len(kw):], posix=False) # .strip().split()
     return unknown_handler, []
 
 def main():
