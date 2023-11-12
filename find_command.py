@@ -19,6 +19,11 @@ def match(pure_input, commands):
     return [k for command in commands for k, v in command.items() if pure_input in v]
 
 
+'''Шукаємо повне співпадіння введеного рядку, якщо неправильний порядок введних символів'''
+def match_mixed_letters(pure_input, commands):
+    return [k for command in commands for k, v in command.items() if sorted(pure_input) == sorted(v)]
+
+
 '''Заміняємо кожний символ на .?(будь-який символ 0 або 1 раз), для пошуку однієї помилки у слові'''
 def regexed_input_one_d(pure_input, ind):
     return pure_input[:ind] + '.?' + pure_input[ind + 1:]
@@ -63,8 +68,33 @@ def get_command(user_input, commands):
     commands = dict_of_command(commands)
     result = match(pure_input, commands)
     if not result:
+        result = match_mixed_letters(pure_input, commands)    
+    if not result:
         result = one_dimensional(pure_input, commands)
     if not result:      
         if len_of_input>=5:
             result = two_dimensional(pure_input, len_of_input, commands)
     return result 
+
+
+if __name__=='__main__':
+    commands = ['help', 'hello', 'address', 'add', 'change', 'phone', 'search', 'birthday', 'email', 
+            'show all', 'show birthdays', 'delete', 'good bye', 'close', 'exit', 'stop']    
+    while True:
+        user_input = input('Enter your command: ')
+        if user_input not in commands:
+            #заходити в пошук тільки якщо введено більше 3 букв
+            result = get_command(user_input, commands)
+            if len(result) == 1:
+                print(f'Did you mean command: {result[0]} ?')
+            elif len(result) > 1:
+                print(f'Did you mean one of the following commands?')
+                for k, v in enumerate(result):
+                    print(k + 1, v)
+            else:
+                print('Command not found. Try again.')
+        else:
+            print (f'your command is {user_input}')
+
+        if user_input in ('good bye', 'close', 'exit', 'stop'):
+            break    

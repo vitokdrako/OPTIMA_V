@@ -1,5 +1,6 @@
 from find_command import get_command
 
+
 commands = ['help', 'hello', 'address', 'add', 'change', 'phone', 'search', 'birthday', 'email', 
             'show all', 'show birthdays', 'delete', 'good bye', 'close', 'exit', 'stop']
 
