@@ -1,14 +1,7 @@
+import shlex
+from pathlib import Path
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Add_notes import Note, NotesList
-import shlex
-import sys
-from pathlib import Path
-import shutil
-import re
-
-from Address_book import AddressBook, Record, DuplicatedPhoneError
-import shlex
-
 from sorting import sort_folders_and_return_result
 
 records: AddressBook = None
@@ -151,7 +144,6 @@ def delete_contact_handler(*args):
             return f"Record for contact {user_name} deleted."
         return f"Record for contact {user_name} not found."
 
-
 @input_error([])
 def greeting_handler(*args):
     greeting = "How can I help you?"
@@ -190,14 +182,7 @@ def show_contacts_handler(*args):
 
 @input_error("path")
 def sort_files_handler(*args):
-    try:
-        folder_path = Path(args[0])
-    except IndexError:
-        return "Please provide the path to the folder you want to sort."
-
-    if not folder_path.exists():
-        return "The specified folder does not exist."
-
+    folder_path = args[0]
     result = sort_folders_and_return_result(folder_path)
     return result
 
@@ -252,8 +237,7 @@ COMMANDS = {
             phone_handler: "phone",
             address_handler: "address",            
             birthday_handler: "birthday",
-            email_handler: "email",
-            sort_files_handler: "sort files",
+            email_handler: "email",            
             search_contact_handler: "search contact",
             show_contacts_handler: "show contacts",            
             show_birthdays_handler: "show birthdays",            
@@ -263,14 +247,15 @@ COMMANDS = {
             search_notes_handler: "search note",
             search_notes_by_tag_handler: "search note tag",
             show_notes_handler: "show notes",            
-            sort_notes_by_tag_count_handler: "tag sort"            
+            sort_notes_by_tag_count_handler: "tag sort",
+            sort_files_handler: "sort files"
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.startswith(kw):
-            return func, shlex.split(text[len(kw):], posix=False) # .strip().split()
+            return func, shlex.split(text[len(kw):], posix=False)
     return unknown_handler, []
 
 def main():
