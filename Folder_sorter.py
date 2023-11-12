@@ -1,12 +1,6 @@
-# Додати функцію для сортування в main.py, вона буде приймати шлях до теки, яку потрібно буде відсортувати - def sort_files_handler()
-# Додати команду для сортування в COMMANDS (пропоную - sort_files_handler: "sort file")
-# Додати в main обробку команди сортування
-
-# Code:
-import sys
-from pathlib import Path
-import shutil
 import re
+import shutil
+from pathlib import Path
 
 
 CATEGORIES = {'images':['.jpeg', '.png', '.jpg', '.svg'],

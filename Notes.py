@@ -1,13 +1,6 @@
-"""
-- Під капотом тегів - словник, де ключ - текст тегу, в видрук іде тільки перелік ключів
-- Теги лишаються в тексті нотатки, але дублюються в поле тегів без знаку #
-- Повернула функцію def _parse_tags та оголошення notes_list, бо без нього не працює корректно
-"""
-
-
 import re
-from collections import UserList
 import pickle
+from collections import UserList
 
 
 class Note:
@@ -49,9 +42,6 @@ class Note:
         for tag in tags:
             tag = tag[1:]
             self._tags_dict[tag] = self._tags_dict.get(tag, 0) + 1
-
-
-
 
     @text.setter
     def text(self, new_text: str) -> None:
