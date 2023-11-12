@@ -264,9 +264,9 @@ def parser(text: str):
         if len(possible_command) == 1:
             new_input = input(f'Did you mean command: "{possible_command[0]}" ? Y/N: ')
             if new_input.lower() == 'Y'.lower():
-                for k, v in COMMANDS.items():
-                    if v == possible_command[0]:
-                        return k, []              
+                for func, kw in COMMANDS.items():
+                    if kw == possible_command[0]:
+                        return func, []              
         elif len(possible_command) > 1:
             print(f'Did you mean one of the following commands?')
             for k, v in enumerate(possible_command):
@@ -280,6 +280,8 @@ def main():
         records = book
         while True:
             user_input = input(">>> ")
+            #або можна в цьому місці зробити перевірку, якщо інпута немає в командах, 
+            #то ми запускаємо find_command. і потім вже очищений інпут передаємо далі в роботу
             if user_input in EXIT_COMMANDS:
                 print("Good bye!")
                 break
