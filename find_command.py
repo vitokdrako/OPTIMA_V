@@ -78,8 +78,10 @@ def get_command(user_input, commands):
 
 
 if __name__=='__main__':
-    commands = ['help', 'hello', 'address', 'add', 'change', 'phone', 'search', 'birthday', 'email', 
-            'show all', 'show birthdays', 'delete', 'good bye', 'close', 'exit', 'stop']    
+    commands = ['help', 'hello', 'add contact', 'delete contact', 'edit contact', 'phone', 'address', 
+                'birthday', 'email', 'search contacts', 'show contacts', 'show birthdays', 'add note', 
+                'delete note', 'edit note', 'search note', 'search note tag', 'show notes', 'sort tag', 
+                'sort files', 'good bye', 'close', 'exit', 'stop']  
     while True:
         user_input = input('Enter your command: ')
         if user_input not in commands:
