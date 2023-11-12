@@ -2,6 +2,7 @@ import shlex
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Notes import Note, NotesList
 from Folder_sorter import sort_folders_and_return_result
+from find_command import get_command
 
 records: AddressBook = None
 notes_list = NotesList()
@@ -257,8 +258,16 @@ def parser(text: str):
             args = shlex.split(text[len(kw):], posix=False)
             args = [arg.removeprefix('"').removesuffix('"') for arg in args]
             return func, args
+    if len(text)>= 3:
+        possible_command = get_command(text, [v for _, v in COMMANDS.items()]+list(EXIT_COMMANDS))
+        if len(possible_command) == 1:
+            print(f'Did you mean command: {possible_command[0]} ?')
+        elif len(possible_command) > 1:
+            print(f'Did you mean one of the following commands?')
+            for k, v in enumerate(possible_command):
+                print(k + 1, v)
     return unknown_handler, []
-
+    
 def main():
     global records
     with AddressBook("address_book.pkl") as book:
