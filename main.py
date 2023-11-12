@@ -45,15 +45,6 @@ def help_handler():
         return help_txt
     return inner
 
-def sort_notes_by_tag_count_handler():
-    sorted_notes = notes_list.sort_by_tag_count()
-    if sorted_notes:
-        for note in sorted_notes:
-            print(note)
-        return ""
-    else:
-        return "No notes to sort."
-
 @capitalize_user_name
 @input_error("name", "phone")
 def add_handler(*args):
@@ -198,10 +189,10 @@ def show_notes_handler():
 #    else:
 #        return "Invalid note number."
 
-@input_error("title")
+@input_error("param")
 def delete_note_handler(*args):
-    title = " ".join(args)
-    if notes_list.remove_by_title(title):
+    param = " ".join(args)
+    if notes_list.remove(param):
         return "Note deleted successfully."
     else:
         return "Note with this title not found."
@@ -215,13 +206,13 @@ def delete_note_handler(*args):
    # else:
       #  return "Invalid note number."
 
-@input_error("old title", "new title", "new text")
-def edit_note_by_title_handler(*args):
-    old_title, new_title, new_text = args[0], args[1], args[2]
-    if notes_list.edit_by_title(old_title, new_title, new_text):
-        return "Note edited successfully."
+@input_error("param", "new title", "new text")
+def edit_note_handler(*args):
+    param, new_title, new_text = args[0], args[1], args[2]
+    if notes_list.edit(param, new_title, new_text):
+        return f"Note '{param}' edited successfully."
     else:
-        return "Note with this title not found."
+        return f"No notes found by the specified param '{param}'."
 
 
 @input_error("query")
@@ -229,23 +220,25 @@ def search_notes_handler(*args):
     query = args[0]
     matches = notes_list.search(query)
     if matches:
-        for match in matches:
-            print(match)
-        return ""
+        return "\n".join(map(lambda note: str(note), matches))
     else:
-        return "No matches found."
+        return f"No notes found for query '{query}'."
     
 @input_error("tag")
 def search_notes_by_tag_handler(*args):
     tag = args[0]
     matches = notes_list.search_by_tag(tag)
     if matches:
-        for match in matches:
-            print(match)
-        return ""
+        return "\n".join(map(lambda note: str(note), matches))
     else:
         return f"No notes found with tag '{tag}'."
 
+def sort_notes_by_tag_count_handler():
+    sorted_notes = notes_list.sort_by_tag_count()
+    if sorted_notes:
+        return "\n".join(map(lambda note: str(note), sorted_notes))
+    else:
+        return "No notes to sort."
 
 COMMANDS = {
             help_handler(): "help",
@@ -263,11 +256,10 @@ COMMANDS = {
             add_note_handler: "note add",
             show_notes_handler: "note show",
             delete_note_handler: "note delete",
-            edit_note_by_title_handler: "note edit",
+            edit_note_handler: "note edit",
             search_notes_handler: "note search",
             sort_notes_by_tag_count_handler: "tag sort",
             search_notes_by_tag_handler: "tag search"
-
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 

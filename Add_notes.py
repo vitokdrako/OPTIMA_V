@@ -20,9 +20,7 @@ class Note:
 
     def __str__(self) -> str:
         tags = ', '.join(tag for tag in self._tags_dict.keys())
-        title_str = self._title if self._title is not None else ""
-        text_str = self._text if self._text is not None else ""
-        return f"Title: {title_str}\nText: {text_str}\nTags: {tags}"
+        return "{:<20} {:<20} {:<50}".format(self.title, tags, self.text)
 
     @property
     def title(self) -> str:
@@ -66,36 +64,41 @@ class NotesList(UserList):
     def __init__(self) -> None:
         super().__init__()
         self.filename = "notes.bin"
+        self.load_notes_from_file()
 
     def append(self, note) -> None:
         super().append(note)
         self._save_notes_to_file()
 
-    #def remove(self, num: int) -> None:
-       # notes_list.pop(num-1)
-       # self._save_notes_to_file()
-
-    def remove_by_title(self, title: str) -> bool:
-        for i, note in enumerate(self.data):
-            if note.title.lower() == title.lower():
-                del self.data[i]
-                self._save_notes_to_file()
-                return True
+    def remove(self, param: str) -> None:
+        index = None
+        if param.isdigit():
+            index = int(param) - 1            
+        else:
+            for i, note in enumerate(self.data):
+                if note.title.lower() == param.lower():
+                    index = i
+                    break
+        if index is not None:                  
+            del self.data[index]
+            self._save_notes_to_file()
+            return True
         return False
 
-    #def edit(self, num: int, title: str, text: str) -> None:
-    
-       # note = Note(title, text)
-       # notes_list[num-1] = note
-       # self._save_notes_to_file()
-
-    def edit_by_title(self, old_title: str, new_title: str, new_text: str) -> bool:
-        for note in self.data:
-            if note.title.lower() == old_title.lower():
-                note.title = new_title
-                note.text = new_text
-                self._save_notes_to_file()
-                return True
+    def edit(self, param: str, title:str, text:str) -> bool:
+        index = None
+        if param.isdigit():
+            index = int(param) -1            
+        else:
+            for i, note in enumerate(self.data):
+                if note.title.lower() == param.lower():
+                    index = i
+                    break
+        if index is not None:                     
+            note = Note(title, text)
+            self.data[index] = note
+            self._save_notes_to_file()
+            return True
         return False
 
     def _save_notes_to_file(self) -> None:
@@ -121,30 +124,5 @@ class NotesList(UserList):
         return sorted_notes
     
     def search_by_tag(self, tag: str):
-        return [note for note in self.data if tag in note.tags_dict]
-
-
-notes_list = NotesList()
-notes_list.load_notes_from_file()
-
-# Test commands
-
-# note1 = Note("Birthday Party", "John's #birdhday party on Friday")
-# notes_list.append(note1)  # Автоматичне збереження при додаванні
-
-# note2 = Note("Purchase list", "Potatoes, bread, milk #buy #food")
-# notes_list.append(note2)
-
-# note3 = Note("Bill's B_day", "Dec,12 #birthday #buy_gift")
-# notes_list.append(note3)
-
-# notes_list.remove(4)     # видалення нотатки за номером
-
-# notes_list.edit(4, "Mark's birthday", "#buy gift for Mark's #birthday")
-
-
-# Друк
-
-# print("{:^5} {:<30} {:<50} {:<50}".format("num", "title", "tags", "text"))
-# for note in notes_list:
-#     print(note)
+        notes = [note for note in self.data if tag in note.tags_dict]
+        return sorted(notes, key=lambda note: note.tags_dict[tag], reverse=True)
