@@ -254,8 +254,10 @@ EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
 def parser(text: str):
     for func, kw in COMMANDS.items():
-        if text.startswith(kw):
-            return func, shlex.split(text[len(kw):], posix=False)
+        if text.lower().startswith(kw):
+            args = shlex.split(text[len(kw):], posix=False)
+            args = [arg.removeprefix('"').removesuffix('"') for arg in args]
+            return func, args
     return unknown_handler, []
 
 def main():
@@ -263,7 +265,7 @@ def main():
     with AddressBook("address_book.pkl") as book:
         records = book
         while True:
-            user_input = input(">>> ").lower()
+            user_input = input(">>> ")
             if user_input in EXIT_COMMANDS:
                 print("Good bye!")
                 break
