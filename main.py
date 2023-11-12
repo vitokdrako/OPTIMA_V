@@ -1,6 +1,8 @@
+import shlex
+from pathlib import Path
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Add_notes import Note, NotesList
-import shlex
+from sorting import sort_folders_and_return_result
 
 records: AddressBook = None
 notes_list = NotesList()
@@ -142,7 +144,6 @@ def delete_contact_handler(*args):
             return f"Record for contact {user_name} deleted."
         return f"Record for contact {user_name} not found."
 
-
 @input_error([])
 def greeting_handler(*args):
     greeting = "How can I help you?"
@@ -178,6 +179,12 @@ def show_notes_handler(*args):
 @input_error([])
 def show_contacts_handler(*args):
     return records.iterator()
+
+@input_error("path")
+def sort_files_handler(*args):
+    folder_path = args[0]
+    result = sort_folders_and_return_result(folder_path)
+    return result
 
 @input_error("title or number")
 def delete_note_handler(*args):
@@ -230,7 +237,7 @@ COMMANDS = {
             phone_handler: "phone",
             address_handler: "address",            
             birthday_handler: "birthday",
-            email_handler: "email",
+            email_handler: "email",            
             search_contact_handler: "search contact",
             show_contacts_handler: "show contacts",            
             show_birthdays_handler: "show birthdays",            
@@ -240,14 +247,15 @@ COMMANDS = {
             search_notes_handler: "search note",
             search_notes_by_tag_handler: "search note tag",
             show_notes_handler: "show notes",            
-            sort_notes_by_tag_count_handler: "tag sort"            
+            sort_notes_by_tag_count_handler: "tag sort",
+            sort_files_handler: "sort files"
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.startswith(kw):
-            return func, shlex.split(text[len(kw):])
+            return func, shlex.split(text[len(kw):], posix=False)
     return unknown_handler, []
 
 def main():
@@ -261,12 +269,19 @@ def main():
                 break
             
             func, data = parser(user_input)
+            
+            if func == sort_files_handler:
+                result = func(*data)
+                print(result)
+                continue
+            
             result = func(*data)
+            
             if isinstance(result, str):
                 print(result)
             else:
                 for i in result:                
-                    print ("\n".join(i))
+                    print("\n".join(i))
                     input("Press enter to show more records")
 
 
