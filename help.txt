@@ -27,6 +27,24 @@ search [term]
 show all
  - Prints all contacts info
 
+note add "title" "text"
+Adds a new note with a title and text.
+
+note show
+ - Displays all saved notes.
+
+note delete [title]
+ - Deletes the note with the specified title.
+
+note edit "old title" "new title" "new text"
+ - Edits a note by its old title, changing it to a new title and text.
+
+note search "query"
+ - Searches for notes by a query in the text or title.
+
+tag sort
+ - Sorts notes by the number of tags from the most to the least.
+
 good bye
 close
 exit
