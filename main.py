@@ -252,6 +252,7 @@ COMMANDS = {
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
+
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.lower().startswith(kw):
@@ -261,12 +262,17 @@ def parser(text: str):
     if len(text)>= 3:
         possible_command = get_command(text, [v for _, v in COMMANDS.items()]+list(EXIT_COMMANDS))
         if len(possible_command) == 1:
-            print(f'Did you mean command: {possible_command[0]} ?')
+            new_input = input(f'Did you mean command: "{possible_command[0]}" ? Y/N: ')
+            if new_input.lower() == 'Y'.lower():
+                for k, v in COMMANDS.items():
+                    if v == possible_command[0]:
+                        return k, []              
         elif len(possible_command) > 1:
             print(f'Did you mean one of the following commands?')
             for k, v in enumerate(possible_command):
                 print(k + 1, v)
     return unknown_handler, []
+    
     
 def main():
     global records
