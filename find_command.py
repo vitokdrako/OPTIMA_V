@@ -39,7 +39,7 @@ def one_dimensional(pure_input, commands):
     return list_of_possible_commands
 
 
-'''Заміна двої симолів у слові на .?(будь-який символ 0 або 1 раз) та .* (будь-який символ 0 або більше разів)'''
+'''Заміна двох симолів у слові на .?(будь-який символ 0 або 1 раз) та .* (будь-який символ 0 або більше разів)'''
 def regexed_input_two_d(pure_input, fixed_ind, ind):
     temp_list = list(pure_input)
     temp_list[fixed_ind] = '.?'

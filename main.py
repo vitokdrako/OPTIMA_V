@@ -259,7 +259,7 @@ def parser(text: str):
             args = shlex.split(text[len(kw):], posix=False)
             args = [arg.removeprefix('"').removesuffix('"') for arg in args]
             return func, args
-    if len(text)>= 3:
+    if len(text)>= 3: #
         possible_command = get_command(text, [v for _, v in COMMANDS.items()]+list(EXIT_COMMANDS))
         if len(possible_command) == 1:
             new_input = input(f'Did you mean command: "{possible_command[0]}" ? Y/N: ')
@@ -273,7 +273,7 @@ def parser(text: str):
                 print(k + 1, v)
     return unknown_handler, []
     
-    
+
 def main():
     global records
     with AddressBook("address_book.pkl") as book:
