@@ -1,4 +1,7 @@
 **/*.bin
 **/*.pkl
+
 __pycache__/**/*
-.idea/
+.idea/**/*
+
+sorting_report.txt
