@@ -1,9 +1,0 @@
-**/*.bin
-**/*.pkl
-
-__pycache__/**/*
-.idea/**/*
-
-sorting_report.txt
-
-test*
