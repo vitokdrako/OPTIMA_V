@@ -1,10 +1,10 @@
 import os
 import shlex
 from pathlib import Path
-from Address_book import AddressBook, Record, DuplicatedPhoneError
-from Notes import Note, NotesList
-from Folder_sorter import sort_folders_and_return_result
-import find_command as fc
+from optima_package.Address_book import AddressBook, Record, DuplicatedPhoneError
+from optima_package.Notes import Note, NotesList
+from optima_package.Folder_sorter import sort_folders_and_return_result
+from optima_package.find_command import get_command
 
 root_path: Path = None
 records: AddressBook = None
@@ -39,7 +39,7 @@ def capitalize_user_name(func):
 
 def unknown_handler(*args):    
     list_of_commands = [v for _, v in COMMANDS.items()] + list(EXIT_COMMANDS)
-    suggested_command = fc.get_command(list(args), list_of_commands)
+    suggested_command = get_command(list(args), list_of_commands)
     if suggested_command:
         func, new_args = parser(suggested_command)
         return func (*new_args)

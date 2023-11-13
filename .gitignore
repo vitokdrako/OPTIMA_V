@@ -1,9 +1,11 @@
+**/Optima.egg-info/**/*
+**/build/**/*
 **/*.bin
 **/*.pkl
 
-__pycache__/**/*
-.idea/**/*
+**/__pycache__/**/*
+**/.idea/**/*
 
-sorting_report.txt
+**/sorting_report.txt
 
-test*
+**/test*
