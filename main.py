@@ -1,11 +1,14 @@
+import os
 import shlex
+from pathlib import Path
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Notes import Note, NotesList
 from Folder_sorter import sort_folders_and_return_result
 import find_command as fc
 
+root_path: Path = None
 records: AddressBook = None
-notes_list = NotesList()
+notes_list = None
 
 def input_error(*expected_args):
     def input_error_wrapper(func):
@@ -229,7 +232,7 @@ def sort_notes_by_tag_count_handler():
 @input_error("path")
 def sort_files_handler(*args):
     folder_path = args[0]
-    result = sort_folders_and_return_result(folder_path)
+    result = sort_folders_and_return_result(folder_path, root_path)
     return result
 
 
@@ -265,11 +268,18 @@ def parser(text: str):
             args = [arg.removeprefix('"').removesuffix('"') for arg in args]
             return func, args
     return unknown_handler, shlex.split(text, posix=False)
-    
+
+def initialize():
+    global root_path
+    root_path = Path(os.environ['USERPROFILE']).joinpath("OPTIMA")
+    if not root_path.exists():
+        root_path.mkdir()
 
 def main():
-    global records
-    with AddressBook("address_book.pkl") as book:
+    global records, notes_list
+    initialize()
+    notes_list = NotesList(root_path)        
+    with AddressBook(str(root_path.joinpath("address_book.bin"))) as book:    
         records = book
         while True:
             user_input = input(">>> ")
