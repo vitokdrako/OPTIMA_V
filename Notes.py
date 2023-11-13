@@ -5,48 +5,48 @@ from collections import UserList
 
 class Note:
     def __init__(self, title: str, text: str) -> None:
-        self._title = title
-        self._text = text
-        self._tags_dict = {}
-        self._parse_tags()
+        self.__title = title
+        self.__text = text
+        self.__tags_dict = {}
+        self.__parse_tags()
 
     def __str__(self) -> str:
-        tags = ', '.join(tag for tag in self._tags_dict.keys())
+        tags = ', '.join(tag for tag in self.__tags_dict.keys())
         return "{:<30} {:<50} {:<50}".format(self.title, tags, self.text)
 
     @property
     def title(self) -> str:
-        return self._title
+        return self.__title
     
     @title.setter
     def title(self, value: str) -> None:
-        self._title = value
+        self.__title = value
 
     @property
     def text(self)  -> str:
-        return self._text
+        return self.__text
     
     @text.setter
     def text(self, value: str) -> None:
-        self._text = value
-        self._parse_tags()
+        self.__text = value
+        self.__parse_tags()
 
     @property
     def tags_dict(self) -> dict:
-        return self._tags_dict
+        return self.__tags_dict
 
-    def _parse_tags(self) -> None:
+    def __parse_tags(self) -> None:
         pattern = r"#\w+"
-        tags = re.findall(pattern, self._text)
+        tags = re.findall(pattern, self.__text)
     
         for tag in tags:
             tag = tag[1:]
-            self._tags_dict[tag] = self._tags_dict.get(tag, 0) + 1
+            self.__tags_dict[tag] = self.__tags_dict.get(tag, 0) + 1
 
     @text.setter
     def text(self, new_text: str) -> None:
-        self._text = new_text
-        self._parse_tags()
+        self.__text = new_text
+        self.__parse_tags()
 
 
 class NotesList(UserList):
