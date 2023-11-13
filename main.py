@@ -271,7 +271,7 @@ def parser(text: str):
 
 def initialize():
     global root_path
-    root_path = Path(os.environ['USERPROFILE']).joinpath("OPTIMA")
+    root_path = Path(os.path.expanduser("~")).joinpath("OPTIMA")
     if not root_path.exists():
         root_path.mkdir()
 
