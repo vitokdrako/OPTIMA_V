@@ -34,8 +34,13 @@ def capitalize_user_name(func):
         return func(*new_args)
     return inner
 
-def unknown_handler(*args):
-    return f"Unknown command. Use <help>"
+def unknown_handler(*args):    
+    list_of_commands = [v for _, v in COMMANDS.items()] + list(EXIT_COMMANDS)
+    suggested_command = fc.get_command(list(args), list_of_commands)
+    if suggested_command:
+        func, new_args = parser(suggested_command)
+        return func (*new_args)
+    return f"Unknown command. Use <help>"    
 
 def help_handler():
     help_txt = ""
@@ -259,7 +264,7 @@ def parser(text: str):
             args = shlex.split(text[len(kw):], posix=False)
             args = [arg.removeprefix('"').removesuffix('"') for arg in args]
             return func, args
-    return unknown_handler, []
+    return unknown_handler, shlex.split(text, posix=False)
     
 
 def main():
@@ -268,10 +273,6 @@ def main():
         records = book
         while True:
             user_input = input(">>> ")
-
-            if user_input not in COMMANDS.values() and user_input not in EXIT_COMMANDS:
-                list_of_commands = [v for _, v in COMMANDS.items()] + list(EXIT_COMMANDS)
-                user_input = fc.get_command(user_input, list_of_commands)
 
             if user_input in EXIT_COMMANDS:
                 print("Good bye!")

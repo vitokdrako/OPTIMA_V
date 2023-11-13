@@ -91,52 +91,36 @@ def choose_command(processed_input):
 '''Основна функція'''
 def get_command(user_input, list_of_commands):
     possible_command=''
-    pure_input = shrink_input(user_input)
-    len_of_input = len(pure_input)
-    
-    if len_of_input < 3:
-        return user_input
-    
-    commands = create_dict_of_command(list_of_commands)
-    list_of_possible_commands = match(pure_input, commands)
-    
-    if not list_of_possible_commands:
-        list_of_possible_commands = match_mixed_letters(pure_input, commands)    
-    if not list_of_possible_commands:
-        list_of_possible_commands = one_dimensional(pure_input, commands)
-    if not list_of_possible_commands:      
-        if len_of_input>=5:
-            list_of_possible_commands = two_dimensional(pure_input, len_of_input, commands)
-    
-    if len(list_of_possible_commands) == 1:
-        possible_command = find_one_command(list_of_possible_commands[0], commands)
-    if len(list_of_possible_commands) > 1:
-        possible_command = choose_command(list_of_possible_commands)
-    
-    return possible_command if possible_command else user_input
+    tested_command = ''
 
-
-if __name__=='__main__':
-    list_of_commands = ['help', 'hello', 'add contact', 'delete contact', 'edit contact', 'phone', 'address', 
-                'birthday', 'email', 'search contacts', 'show contacts', 'show birthdays', 'add note', 
-                'delete note', 'edit note', 'search note', 'search note tag', 'show notes', 'sort tag', 
-                'sort files', 'good bye', 'close', 'exit', 'stop']  
-    while True:
-        user_input = input('Enter your command: ')
-        if user_input not in list_of_commands:
-            #заходити в пошук тільки якщо введено більше 3 букв
-            result = get_command(user_input, list_of_commands)
-            print (result)
-            # if len(result) == 1:
-            #     print(f'Did you mean command: {result[0]} ?')
-            # elif len(result) > 1:
-            #     print(f'Did you mean one of the following commands?')
-            #     for k, v in enumerate(result):
-            #         print(k + 1, v)
-            # else:
-            #     print('Command not found. Try again.')
-        else:
-            print (f'your command is {user_input}')
-
-        if user_input in ('good bye', 'close', 'exit', 'stop'):
-            break    
+    for word in user_input:
+        tested_command += word
+        pure_input = shrink_input(tested_command)
+        len_of_input = len(pure_input)
+        
+        if len_of_input < 3:
+            continue
+        
+        commands = create_dict_of_command(list_of_commands)
+        list_of_possible_commands = match(pure_input, commands)
+        
+        if not list_of_possible_commands:
+            list_of_possible_commands = match_mixed_letters(pure_input, commands)    
+        if not list_of_possible_commands:
+            list_of_possible_commands = one_dimensional(pure_input, commands)
+        if not list_of_possible_commands:      
+            if len_of_input>=5:
+                list_of_possible_commands = two_dimensional(pure_input, len_of_input, commands)
+        
+        if len(list_of_possible_commands) == 1:
+            possible_command = find_one_command(list_of_possible_commands[0], commands)
+        if len(list_of_possible_commands) > 1:
+            possible_command = choose_command(list_of_possible_commands)
+        
+        if possible_command:
+            break        
+    
+    if possible_command:
+        args = user_input[len(possible_command.split()):]
+        return f"{possible_command} {' '.join(args)}"
+    return " ".join(user_input)
