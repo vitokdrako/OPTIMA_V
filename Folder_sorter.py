@@ -105,7 +105,7 @@ def sort_folders(path:Path) -> None:
             removing_folders(i.parent)
 
 
-def sort_folders_and_return_result(path: str) -> str:
+def sort_folders_and_return_result(path: str, report_path: Path) -> str:
     global root_path
     root_path = Path(path)
     if not root_path.exists():
@@ -120,8 +120,8 @@ def sort_folders_and_return_result(path: str) -> str:
     result += f'known_formats={known_formats}\nother_formats={other_formats}\n'
 
     
-    report_filename = "sorting_report.txt"
-    with open(report_filename, "w", encoding="utf-8") as report_file:
+    report_filename = report_path.joinpath("sorting_report.txt")
+    with open(str(report_filename), "w", encoding="utf-8") as report_file:
         report_file.write(result)
 
-    return f"Folder '{path}' sorted successfully. See report file: '{Path(report_filename).absolute()}'."
+    return f"Folder '{path}' sorted successfully. See report file: '{report_filename.absolute()}'."

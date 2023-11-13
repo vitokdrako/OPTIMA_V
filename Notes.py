@@ -1,5 +1,6 @@
 import re
 import pickle
+from pathlib import Path
 from collections import UserList
 
 
@@ -50,9 +51,9 @@ class Note:
 
 
 class NotesList(UserList):
-    def __init__(self) -> None:
+    def __init__(self, root_path: Path) -> None:
         super().__init__()
-        self.filename = "notes.bin"
+        self.filename = str(root_path.joinpath("notes.bin"))
         self.load_notes_from_file()
 
     def append(self, note) -> None:
