@@ -276,8 +276,7 @@ def initialize():
     if not root_path.exists():
         root_path.mkdir()
 
-def main():
-    print(Path.cwd())
+def main():    
     global records, notes_list
     initialize()
     notes_list = NotesList(root_path)        
