@@ -50,7 +50,8 @@ def help_handler():
     def inner(*args):
         nonlocal help_txt
         if not help_txt:
-            with open("help.txt") as file:            
+            file_path = Path(__file__).parent.joinpath("help.txt")
+            with open(str(file_path)) as file:            
                 help_txt = "".join(file.readlines())
         return help_txt
     return inner
@@ -276,6 +277,7 @@ def initialize():
         root_path.mkdir()
 
 def main():
+    print(Path.cwd())
     global records, notes_list
     initialize()
     notes_list = NotesList(root_path)        
