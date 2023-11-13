@@ -10,7 +10,7 @@ def shrink_input(user_input):
 
 
 '''Створюємо новий словник для обробки команд без пробілів'''
-def dict_of_command(commands):
+def create_dict_of_command(commands):
     return [{i : re.sub('\W|\d', '', i)} for i in commands]
 
 
@@ -61,40 +61,79 @@ def two_dimensional(pure_input, len_of_input, commands):
     return list_of_possible_commands
 
 
+'''Додатковий інпут для уточення, якщо знайдено одне співпадіння'''
+def find_one_command(processed_input, commands):
+    new_input = input(f'Did you mean command: <{processed_input}> ? Y/N: ')
+    if new_input.lower() == 'Y'.lower():
+        for command in commands:
+            if processed_input in command:
+                return processed_input
+    return new_input
+
+'''Додатковий інпут для уточення, якщо більше одного співпадіння'''
+def choose_command(processed_input):
+    dict_of_possible_commands ={}
+    print ('Did you mean one of the following commands?')
+    for k, v in enumerate(processed_input):
+        dict_of_possible_commands[k+1] = v
+        print(k + 1, v)    
+    new_input = input(f'Choose number of command or press any key to continue: ')
+    try:
+        new_input = int(new_input)
+        if new_input == 1:
+            return dict_of_possible_commands[new_input]
+        return 'value out of sequence'
+    except:
+        return new_input
+    
+
 '''Основна функція'''
-def get_command(user_input, commands):
+def get_command(user_input, list_of_commands):
+    possible_command=''
     pure_input = shrink_input(user_input)
     len_of_input = len(pure_input)
-    commands = dict_of_command(commands)
-    result = match(pure_input, commands)
-    if not result:
-        result = match_mixed_letters(pure_input, commands)    
-    if not result:
-        result = one_dimensional(pure_input, commands)
-    if not result:      
+    
+    if len_of_input < 3:
+        return user_input
+    
+    commands = create_dict_of_command(list_of_commands)
+    list_of_possible_commands = match(pure_input, commands)
+    
+    if not list_of_possible_commands:
+        list_of_possible_commands = match_mixed_letters(pure_input, commands)    
+    if not list_of_possible_commands:
+        list_of_possible_commands = one_dimensional(pure_input, commands)
+    if not list_of_possible_commands:      
         if len_of_input>=5:
-            result = two_dimensional(pure_input, len_of_input, commands)
-    return result 
+            list_of_possible_commands = two_dimensional(pure_input, len_of_input, commands)
+    
+    if len(list_of_possible_commands) == 1:
+        possible_command = find_one_command(list_of_possible_commands[0], commands)
+    if len(list_of_possible_commands) > 1:
+        possible_command = choose_command(list_of_possible_commands)
+    
+    return possible_command if possible_command else user_input
 
 
 if __name__=='__main__':
-    commands = ['help', 'hello', 'add contact', 'delete contact', 'edit contact', 'phone', 'address', 
+    list_of_commands = ['help', 'hello', 'add contact', 'delete contact', 'edit contact', 'phone', 'address', 
                 'birthday', 'email', 'search contacts', 'show contacts', 'show birthdays', 'add note', 
                 'delete note', 'edit note', 'search note', 'search note tag', 'show notes', 'sort tag', 
                 'sort files', 'good bye', 'close', 'exit', 'stop']  
     while True:
         user_input = input('Enter your command: ')
-        if user_input not in commands:
+        if user_input not in list_of_commands:
             #заходити в пошук тільки якщо введено більше 3 букв
-            result = get_command(user_input, commands)
-            if len(result) == 1:
-                print(f'Did you mean command: {result[0]} ?')
-            elif len(result) > 1:
-                print(f'Did you mean one of the following commands?')
-                for k, v in enumerate(result):
-                    print(k + 1, v)
-            else:
-                print('Command not found. Try again.')
+            result = get_command(user_input, list_of_commands)
+            print (result)
+            # if len(result) == 1:
+            #     print(f'Did you mean command: {result[0]} ?')
+            # elif len(result) > 1:
+            #     print(f'Did you mean one of the following commands?')
+            #     for k, v in enumerate(result):
+            #         print(k + 1, v)
+            # else:
+            #     print('Command not found. Try again.')
         else:
             print (f'your command is {user_input}')
 
