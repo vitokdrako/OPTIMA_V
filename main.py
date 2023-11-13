@@ -255,7 +255,7 @@ COMMANDS = {
             sort_notes_by_tag_count_handler: "sort tag",
             sort_files_handler: "sort files"
             }
-EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
+EXIT_COMMANDS = {"good bye", "close", "exit", "stop"}
 
 
 def parser(text: str):
