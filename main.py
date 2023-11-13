@@ -270,7 +270,7 @@ def main():
             user_input = input(">>> ")
 
             if user_input not in COMMANDS.values() and user_input not in EXIT_COMMANDS:
-                list_of_commands = [v for _, v in COMMANDS.items()]+list(EXIT_COMMANDS)
+                list_of_commands = [v for _, v in COMMANDS.items()] + list(EXIT_COMMANDS)
                 user_input = fc.get_command(user_input, list_of_commands)
 
             if user_input in EXIT_COMMANDS:

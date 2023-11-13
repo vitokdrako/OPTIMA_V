@@ -70,6 +70,7 @@ def find_one_command(processed_input, commands):
                 return processed_input
     return new_input
 
+
 '''Додатковий інпут для уточення, якщо більше одного співпадіння'''
 def choose_command(processed_input):
     dict_of_possible_commands ={}
@@ -80,7 +81,7 @@ def choose_command(processed_input):
     new_input = input(f'Choose number of command or press any key to continue: ')
     try:
         new_input = int(new_input)
-        if new_input == 1:
+        if new_input in dict_of_possible_commands:
             return dict_of_possible_commands[new_input]
         return 'value out of sequence'
     except:
