@@ -2,6 +2,7 @@ import shlex
 from Address_book import AddressBook, Record, DuplicatedPhoneError
 from Notes import Note, NotesList
 from Folder_sorter import sort_folders_and_return_result
+import find_command as fc
 
 records: AddressBook = None
 notes_list = NotesList()
@@ -33,8 +34,13 @@ def capitalize_user_name(func):
         return func(*new_args)
     return inner
 
-def unknown_handler(*args):
-    return f"Unknown command. Use <help>"
+def unknown_handler(*args):    
+    list_of_commands = [v for _, v in COMMANDS.items()] + list(EXIT_COMMANDS)
+    suggested_command = fc.get_command(list(args), list_of_commands)
+    if suggested_command:
+        func, new_args = parser(suggested_command)
+        return func (*new_args)
+    return f"Unknown command. Use <help>"    
 
 def help_handler():
     help_txt = ""
@@ -251,13 +257,15 @@ COMMANDS = {
             }
 EXIT_COMMANDS = {"good bye", "close", "exit", "stop", "g"}
 
+
 def parser(text: str):
     for func, kw in COMMANDS.items():
         if text.lower().startswith(kw):
             args = shlex.split(text[len(kw):], posix=False)
             args = [arg.removeprefix('"').removesuffix('"') for arg in args]
             return func, args
-    return unknown_handler, []
+    return unknown_handler, shlex.split(text, posix=False)
+    
 
 def main():
     global records
@@ -265,6 +273,7 @@ def main():
         records = book
         while True:
             user_input = input(">>> ")
+
             if user_input in EXIT_COMMANDS:
                 print("Good bye!")
                 break
