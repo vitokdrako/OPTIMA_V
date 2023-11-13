@@ -209,6 +209,9 @@ class AddressBook(UserDict):
     def __exit__(self, exception_type, exception_value, traceback):
         with open(self.__file_name, "wb") as fh:
             pickle.dump(self.data, fh)
+        if exception_type:
+            print(f"There was an error during execution: {exception_type.__name__} = {exception_value}")
+        return True
     
     def search_contacts(self, term):
         result = list(filter(lambda contact: term in contact.name.value.lower() or contact.has_phone(term), self.data.values()))
