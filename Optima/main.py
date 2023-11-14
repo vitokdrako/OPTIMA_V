@@ -1,10 +1,10 @@
 import os
 import shlex
 from pathlib import Path
-from Optima.Address_book import AddressBook, Record, DuplicatedPhoneError
-from Optima.Notes import Note, NotesList
-from Optima.Folder_sorter import sort_folders_and_return_result
-from Optima.find_command import get_command
+from Address_book import AddressBook, Record, DuplicatedPhoneError
+from Notes import Note, NotesList
+from Folder_sorter import sort_folders_and_return_result
+from find_command import get_command
 
 root_path: Path = None
 records: AddressBook = None
@@ -170,6 +170,7 @@ def search_contacts_handler(*args):
 
 @input_error([])
 def show_contacts_handler(*args):
+    print("{:<10} {:<40} {:<35} {:<15} {:<60}".format("name", "phones", "email", "birthday", "address"))
     return records.iterator()
 
 @input_error("days")
