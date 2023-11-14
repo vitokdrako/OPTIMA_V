@@ -16,7 +16,8 @@ def input_error(*expected_args):
             try:
                 return func(*args)
             except IndexError:
-                return f"Please enter {' and '.join(expected_args)}"
+                params = [f"[{arg}]" for arg in expected_args]                                                                       
+                return f"Please enter command in the format:    command {' '.join(params)}   or use help."
             except KeyError:
                 return f"The record for contact {args[0]} not found. Try another contact or use help."
             except ValueError as error:
@@ -33,7 +34,8 @@ def input_error(*expected_args):
 def capitalize_user_name(func):
     def inner(*args):
         new_args = list(args)
-        new_args[0] = new_args[0].title()
+        if new_args:
+            new_args[0] = new_args[0].title()
         return func(*new_args)
     return inner
 
@@ -120,7 +122,7 @@ def phone_handler(*args):
         return "; ".join(p.value for p in record.phones)
 
 @capitalize_user_name    
-@input_error("name")        
+@input_error("name", "address")        
 def address_handler(*args):
     user_name = args[0]
     user_address = args[1] if len(args) > 1 else None
@@ -133,7 +135,7 @@ def address_handler(*args):
             return f"Address for contact {user_name}: {record.address}."
         
 @capitalize_user_name    
-@input_error("name")
+@input_error("name", "DD-MM-YYYY")
 def birthday_handler(*args):
     user_name = args[0]
     user_birthday = args[1] if len(args) > 1 else None
@@ -146,7 +148,7 @@ def birthday_handler(*args):
             return f"{record.days_to_birthday()} days to the next {user_name}'s birthday ({record.birthday})."
         
 @capitalize_user_name    
-@input_error("name")        
+@input_error("name", "email")        
 def email_handler(*args):
     user_name = args[0]
     user_email = args[1] if len(args) > 1 else None

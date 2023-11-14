@@ -193,7 +193,7 @@ class AddressBook(UserDict):
     def __values(self):
         return list(self.data.values())
     
-    def iterator(self, n=2):
+    def iterator(self, n=5):
         counter = 0
         values = self.__values()
         while counter < len(values):
