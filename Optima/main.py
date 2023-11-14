@@ -288,7 +288,6 @@ def main():
         print("\33[92m" + f"Wake up {os.getlogin().title()}...")
         print("The OPTIMA has you...")
         print("Follow the 'help' command.")
-        print(f"Knock, knock, {os.getlogin().title()}")
 
         records = book
         while True:
