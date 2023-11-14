@@ -1,10 +1,10 @@
 import os
 import shlex
 from pathlib import Path
-from optima_package.Address_book import AddressBook, Record, DuplicatedPhoneError
-from optima_package.Notes import Note, NotesList
-from optima_package.Folder_sorter import sort_folders_and_return_result
-from optima_package.find_command import get_command
+from Optima.Address_book import AddressBook, Record, DuplicatedPhoneError
+from Optima.Notes import Note, NotesList
+from Optima.Folder_sorter import sort_folders_and_return_result
+from Optima.find_command import get_command
 
 root_path: Path = None
 records: AddressBook = None
@@ -253,8 +253,8 @@ COMMANDS = {
             add_note_handler: "add note",
             delete_note_handler: "delete note",
             edit_note_handler: "edit note",
-            search_notes_handler: "search note",
             search_notes_by_tag_handler: "search note tag",
+            search_notes_handler: "search note",
             show_notes_handler: "show notes",            
             sort_notes_by_tag_count_handler: "sort tag",
             sort_files_handler: "sort files"
@@ -280,7 +280,13 @@ def main():
     global records, notes_list
     initialize()
     notes_list = NotesList(root_path)        
-    with AddressBook(str(root_path.joinpath("address_book.bin"))) as book:    
+    with AddressBook(str(root_path.joinpath("address_book.bin"))) as book:
+        os.system('cls' if os.name == 'nt' else 'clear')    
+        print("\33[92m" + f"Wake up {os.getlogin().title()}...")
+        print("The OPTIMA has you...")
+        print("Follow the 'help' command.")
+        print(f"Knock, knock, {os.getlogin().title()}")
+
         records = book
         while True:
             user_input = input(">>> ")
@@ -299,6 +305,8 @@ def main():
                 for i in result:                
                     print("\n".join(i))
                     input("Press enter to show more records")
+
+        print ("\033[0m")
 
 
 if __name__ == "__main__":

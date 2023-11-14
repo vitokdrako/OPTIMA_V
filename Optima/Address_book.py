@@ -211,6 +211,7 @@ class AddressBook(UserDict):
             pickle.dump(self.data, fh)
         if exception_type:
             print(f"There was an error during execution: {exception_type.__name__} = {exception_value}")
+            print("\033[0m")
         return True
     
     def search_contacts(self, term):
