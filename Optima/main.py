@@ -1,10 +1,10 @@
 import os
 import shlex
 from pathlib import Path
-from Address_book import AddressBook, Record, DuplicatedPhoneError
-from Notes import Note, NotesList
-from Folder_sorter import sort_folders_and_return_result
-from find_command import get_command
+from Optima.Address_book import AddressBook, Record, DuplicatedPhoneError
+from Optima.Notes import Note, NotesList
+from Optima.Folder_sorter import sort_folders_and_return_result
+from Optima.find_command import get_command
 
 root_path: Path = None
 records: AddressBook = None
