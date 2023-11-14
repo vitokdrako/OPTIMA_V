@@ -123,4 +123,4 @@ def get_command(user_input, list_of_commands):
     if possible_command:
         args = user_input[len(possible_command.split()):]
         return f"{possible_command} {' '.join(args)}"
-    return " ".join(user_input)
+    return None
