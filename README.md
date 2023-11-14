@@ -43,8 +43,9 @@ optima
 
 ## Supported bot commands
 
-| Command | Description |
+|  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; Command  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp; | Description |
 |---------|-------------|
+| **Address book commands** |
 | **add contact** [name] [phone-1] [phone-2] ... [phone-n] | Adds new contact record with name and phone number/numbers |
 | **delete contact** [name] | Deletes contact by name |
 | **delete contact** [name] [phone-1] [phone-2] ... [phone-n] | Deletes phone numbers for contact |
@@ -59,6 +60,7 @@ optima
 | **search contacts** [query] | Searches for contacts by partial match of name or phone  |
 | **show contacts** | Prints all contacts info with pagination |
 | **show birthdays** [days] | Prints contacts having birthday within following number of days |
+| **Notes commands** |
 | **add note** ["title"] ["text"] | Adds a new note with a title and text. Wrap title and text with double quotes |
 | **delete note** ["title"] | Deletes the note with the specified title. Wrap title and text with double quotes |
 | **delete note** [number] | Deletes the note with the specified number. Hint: use 'show notes' to see numbers |
@@ -68,6 +70,7 @@ optima
 | **search note tag** [tag] | Searches for notes by a tag |
 | **show notes** | Prints all saved notes in a table format |
 | **sort tag** | Sorts notes by the number of tags from the most to the least |
+| **Exit commands** |
 | **sort files** [path] | Sorts files in the target folder by type, unpacks archives, deletes empty folders. Saves result of sorting to the report file |
 | **good bye, close, exit, stop** | Stops work and exits bot
 
