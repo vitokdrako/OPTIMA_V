@@ -121,8 +121,10 @@ class Record:
         self.email = Email(email) if email else "not set"
 
     def __str__(self):
-        return f"Contact name: {self.name}, phones: {'; '.join(p.value for p in self.phones)}, email: {self.email}, birthday: {self.birthday}, address: {self.address}"
+        # return f"Contact name: {self.name}, phones: {'; '.join(p.value for p in self.phones)}, email: {self.email}, birthday: {self.birthday}, address: {self.address}"
+        return "{:<10} {:<40} {:<35} {:<15} {:<60}".format(f"{self.name}", '; '.join(p.value for p in self.phones), f"{self.email}", f"{self.birthday}", f"{self.address}")
     
+
     def add_phone(self, phone: str): 
         existing_phone = self.find_phone(phone)
         if not existing_phone:

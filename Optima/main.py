@@ -170,6 +170,7 @@ def search_contacts_handler(*args):
 
 @input_error([])
 def show_contacts_handler(*args):
+    print("{:<10} {:<40} {:<35} {:<15} {:<60}".format("name", "phones", "email", "birthday", "address"))
     return records.iterator()
 
 @input_error("days")
