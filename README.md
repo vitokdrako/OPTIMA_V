@@ -70,8 +70,9 @@ optima
 | **search note tag** [tag] | Searches for notes by a tag |
 | **show notes** | Prints all saved notes in a table format |
 | **sort tag** | Sorts notes by the number of tags from the most to the least |
-| **Exit commands** |
+| **Sorter commands**|
 | **sort files** [path] | Sorts files in the target folder by type, unpacks archives, deletes empty folders. Saves result of sorting to the report file |
+| **Exit commands** |
 | **good bye, close, exit, stop** | Stops work and exits bot
 
 
